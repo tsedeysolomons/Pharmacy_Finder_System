@@ -1,0 +1,119 @@
+/* src/styles.scss - UPDATED VERSION */
+
+/* Remove old @import lines and use @use instead */
+
+/* Option 1: Import Bootstrap as a whole (simplest) */
+@use "bootstrap/scss/bootstrap" with (
+  $primary: #0d6efd,
+  $secondary: #6c757d,
+  $success: #198754,
+  $danger: #dc3545,
+  $warning: #ffc107,
+  $info: #0dcaf0
+);
+
+/* OR Option 2: Import Bootstrap components individually (more control) */
+/*
+// Configuration
+@use "bootstrap/scss/functions";
+@use "bootstrap/scss/variables";
+@use "bootstrap/scss/mixins";
+
+// Optional Bootstrap components
+@use "bootstrap/scss/root";
+@use "bootstrap/scss/reboot";
+@use "bootstrap/scss/type";
+@use "bootstrap/scss/images";
+@use "bootstrap/scss/containers";
+@use "bootstrap/scss/grid";
+@use "bootstrap/scss/buttons";
+@use "bootstrap/scss/forms";
+@use "bootstrap/scss/nav";
+@use "bootstrap/scss/navbar";
+@use "bootstrap/scss/card";
+@use "bootstrap/scss/alert";
+@use "bootstrap/scss/list-group";
+@use "bootstrap/scss/close";
+@use "bootstrap/scss/modal";
+@use "bootstrap/scss/utilities";
+@use "bootstrap/scss/helpers";
+@use "bootstrap/scss/utilities/api";
+
+// Custom variables after Bootstrap
+$primary: #0d6efd;
+$secondary: #6c757d;
+*/
+
+/* Global styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Flexbox utility classes */
+.flex {
+  display: flex;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.align-start {
+  align-items: flex-start;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.align-end {
+  align-items: flex-end;
+}
+
+/* Spacing */
+.gap-1 { gap: 0.25rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 1rem; }
+.gap-4 { gap: 1.5rem; }
+.gap-5 { gap: 3rem; }
+
+/* Custom Angular Material overrides */
+.mat-card {
+  margin: 1rem;
+}
+
+.mat-form-field {
+  width: 100%;
+}
