@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PharmacyFinder.API.Models.Entities
 {
-    [Table("PharmacyApprovalHistorys")]
+    [Table("PharmacyApprovalHistories")]
     public class PharmacyApprovalHistory
     {
         [Key]
@@ -14,7 +14,7 @@ namespace PharmacyFinder.API.Models.Entities
         public int PharmacyId { get; set; }
         [Required]
         public int ApprovedByUserId { get; set; }
-        [StringLength(250)]
+        [StringLength(255)]
         public string Remarks { get; set; }
         public DateTime ApprovedAt { get; set; } = DateTime.UtcNow;
         [ForeignKey("PharmacyId")]

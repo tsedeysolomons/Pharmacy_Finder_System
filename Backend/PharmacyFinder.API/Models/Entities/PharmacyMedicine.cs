@@ -8,6 +8,9 @@ namespace PharmacyFinder.API.Models.Entities
     [Table("PharmacyMedicines")]
     public class PharmacyMedicine
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int PharmacyMedicineId { get; set; }
         [Required]
         public int PharmacyId { get; set; }
         [Required]

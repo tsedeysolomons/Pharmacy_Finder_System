@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Drawing;
+//using System.Drawing;
 
 namespace PharmacyFinder.API.Models.Entities
 {
@@ -26,7 +26,11 @@ namespace PharmacyFinder.API.Models.Entities
         [MaxLength(500)]
         public string? Address { get; set; }
         // 🌍 SQL Server GEOGRAPHY
-        public Point? Location { get; set; }
+        [Column(TypeName = "decimal(9,6)")]
+        public decimal Latitude { get; set; }
+        [Column(TypeName = "decimal(9,6)")]
+        public decimal Longitude { get; set; }
+        [Required]
         public bool IsActive { get; set; } = true;
         [Required]
         [MaxLength(100)]
@@ -35,7 +39,7 @@ namespace PharmacyFinder.API.Models.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public User? Owner { get; set; }
         // Navigation Properties
-        //public ICollection<PharmacyMedicine>? PharmacyMedicines { get; set; }
-        //public ICollection<PharmacyOperatingHour>? OperatingHours { get; set; }
+        public ICollection<PharmacyMedicine>? PharmacyMedicines { get; set; }
+        public ICollection<PharmacyOperatingHour>? OperatingHours { get; set; }
     }
 }

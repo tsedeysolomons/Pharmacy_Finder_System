@@ -34,9 +34,8 @@ namespace PharmacyFinder.API.Models.Entities
 
         public ICollection<UserRole>? UserRoles { get; set; }
         public ICollection<Pharmacy>? Pharmacies { get; set; }
-
+        public ICollection<Prescription>? Prescriptions { get; set; }
     }
     // Navigation Properties
-    /*public ICollection<Pharmacy>? Pharmacies { get; set; }
-        public ICollection<Prescription>? Prescriptions { get; set; }*/
+
 }
