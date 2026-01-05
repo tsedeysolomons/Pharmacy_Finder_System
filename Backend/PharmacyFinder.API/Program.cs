@@ -1,4 +1,7 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PharmacyFinder.API.Data;
 //using NetTopologySuite.Geometries;
 
@@ -6,37 +9,71 @@ using PharmacyFinder.API.Data;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Swagger services
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ApplsDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("AppsDbContext"),
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
     sqlOptions => sqlOptions.UseNetTopologySuite()
 ));
+
+// Add JWT Authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+#pragma warning disable CS8604 // Possible null reference argument.
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
+#pragma warning restore CS8604 // Possible null reference argument.
+});
+
 WebApplication app = builder.Build();
 
 using (IServiceScope scope = app.Services.CreateScope())
 {
-    ApplsDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplsDbContext>();
-    dbContext.Database.Migrate();
-    if (!dbContext.Database.CanConnect())
+    try
     {
-        // Database connection successful
-        throw new NotImplementedException("Unable to connect to the database.");
+        ApplsDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplsDbContext>();
+        dbContext.Database.Migrate();
+        if (!dbContext.Database.CanConnect())
+        {
+            // Database connection successful
+            throw new NotImplementedException("Unable to connect to the database.");
+        }
+        else
+        {
+            Console.WriteLine("Database connection successful!");
+        }
     }
-    else
+    catch (Exception ex)
     {
-        Console.WriteLine("Database connection successful!");   // Handle the case where the database connection fails
+        Console.WriteLine($"Database migration/connection failed: {ex.Message}");
     }
 }
-
-WebApplication tempapp = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     _ = app.UseSwagger();
     _ = app.UseSwaggerUI();
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapControllers();
 
 app.MapGet("/", () => "Pharmacy Finder API is running 🚀");
 
@@ -50,6 +87,5 @@ app.MapGet("/api/health", () =>
         Version = "1.0.0"
     });
 });
-
 
 app.Run();

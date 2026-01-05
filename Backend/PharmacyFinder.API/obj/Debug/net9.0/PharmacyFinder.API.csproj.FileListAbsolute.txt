@@ -8,7 +8,9 @@ C:\Users\tsede\OneDrive\Desktop\Pharmacy Registration\PharmacyFinderSystem\Backe
 C:\Users\tsede\OneDrive\Desktop\Pharmacy Registration\PharmacyFinderSystem\Backend\PharmacyFinder.API\bin\Debug\net9.0\PharmacyFinder.API.pdb
 C:\Users\tsede\OneDrive\Desktop\Pharmacy Registration\PharmacyFinderSystem\Backend\PharmacyFinder.API\bin\Debug\net9.0\Azure.Core.dll
 C:\Users\tsede\OneDrive\Desktop\Pharmacy Registration\PharmacyFinderSystem\Backend\PharmacyFinder.API\bin\Debug\net9.0\Azure.Identity.dll
+C:\Users\tsede\OneDrive\Desktop\Pharmacy Registration\PharmacyFinderSystem\Backend\PharmacyFinder.API\bin\Debug\net9.0\BCrypt.Net-Next.dll
 C:\Users\tsede\OneDrive\Desktop\Pharmacy Registration\PharmacyFinderSystem\Backend\PharmacyFinder.API\bin\Debug\net9.0\Humanizer.dll
+C:\Users\tsede\OneDrive\Desktop\Pharmacy Registration\PharmacyFinderSystem\Backend\PharmacyFinder.API\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\tsede\OneDrive\Desktop\Pharmacy Registration\PharmacyFinderSystem\Backend\PharmacyFinder.API\bin\Debug\net9.0\Microsoft.AspNetCore.OpenApi.dll
 C:\Users\tsede\OneDrive\Desktop\Pharmacy Registration\PharmacyFinderSystem\Backend\PharmacyFinder.API\bin\Debug\net9.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\tsede\OneDrive\Desktop\Pharmacy Registration\PharmacyFinderSystem\Backend\PharmacyFinder.API\bin\Debug\net9.0\Microsoft.Build.Locator.dll

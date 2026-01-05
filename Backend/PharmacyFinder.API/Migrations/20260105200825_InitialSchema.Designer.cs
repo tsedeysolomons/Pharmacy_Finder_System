@@ -12,8 +12,8 @@ using PharmacyFinder.API.Data;
 namespace PharmacyFinder.API.Migrations
 {
     [DbContext(typeof(ApplsDbContext))]
-    [Migration("20260105090449_InitialCreate0")]
-    partial class InitialCreate0
+    [Migration("20260105200825_InitialSchema")]
+    partial class InitialSchema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,9 @@ namespace PharmacyFinder.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MedicineId"));
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsPrescriptionRequired")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -48,8 +51,6 @@ namespace PharmacyFinder.API.Migrations
                         .HasColumnType("nvarchar(150)");
 
                     b.HasKey("MedicineId");
-
-                    b.HasIndex("MedicineName");
 
                     b.ToTable("Medicines");
 
@@ -99,8 +100,7 @@ namespace PharmacyFinder.API.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -142,23 +142,6 @@ namespace PharmacyFinder.API.Migrations
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Pharmacies");
-
-                    b.HasData(
-                        new
-                        {
-                            PharmacyId = 1,
-                            Address = "123 Main Street, Cityville",
-                            ApprovalStatus = "Approved",
-                            CreatedAt = new DateTime(2026, 1, 5, 9, 4, 48, 477, DateTimeKind.Utc).AddTicks(1088),
-                            Email = "central@pharmacy.com",
-                            IsActive = true,
-                            Latitude = 12.345678m,
-                            LicenseNumber = "LIC123456",
-                            Longitude = 98.765432m,
-                            OwnerId = 1,
-                            PharmacyName = "Central Pharmacy",
-                            PhoneNumber = "+1234567890"
-                        });
                 });
 
             modelBuilder.Entity("PharmacyFinder.API.Models.Entities.PharmacyApprovalHistory", b =>
@@ -169,7 +152,7 @@ namespace PharmacyFinder.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApprovalId"));
 
-                    b.Property<DateTime>("ApprovedAt")
+                    b.Property<DateTime?>("ApprovedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("ApprovedByUserId")
@@ -201,8 +184,7 @@ namespace PharmacyFinder.API.Migrations
 
                     b.Property<DateTime>("LastUpdated")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("MedicineId")
                         .HasColumnType("int");
@@ -222,8 +204,7 @@ namespace PharmacyFinder.API.Migrations
 
                     b.HasIndex("MedicineId");
 
-                    b.HasIndex("PharmacyId", "MedicineId")
-                        .IsUnique();
+                    b.HasIndex("PharmacyId");
 
                     b.ToTable("PharmacyMedicines");
                 });
@@ -266,14 +247,13 @@ namespace PharmacyFinder.API.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
                         .HasDefaultValue("Pending");
 
                     b.Property<DateTime>("UploadedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -361,8 +341,7 @@ namespace PharmacyFinder.API.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -400,7 +379,7 @@ namespace PharmacyFinder.API.Migrations
                         new
                         {
                             UserId = 1,
-                            CreatedAt = new DateTime(2026, 1, 5, 9, 4, 48, 476, DateTimeKind.Utc).AddTicks(1624),
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "admin@pharmacyfinder.com",
                             FullName = "System Administrator",
                             IsActive = true,
@@ -454,7 +433,7 @@ namespace PharmacyFinder.API.Migrations
                     b.HasOne("PharmacyFinder.API.Models.Entities.User", "Approver")
                         .WithMany("ApprovedPharmacies")
                         .HasForeignKey("ApprovedByUserId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("PharmacyFinder.API.Models.Entities.Pharmacy", "Pharmacy")

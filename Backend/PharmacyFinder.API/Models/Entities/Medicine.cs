@@ -16,5 +16,6 @@ namespace PharmacyFinder.API.Models.Entities
         public string? Manufacturer { get; set; }
         [Required]
         public bool IsPrescriptionRequired { get; set; }
+        public string? Description { get; internal set; }
     }
 }

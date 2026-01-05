@@ -9,7 +9,7 @@ namespace PharmacyFinder.API.Models.Entities
     public class PharmacyApprovalHistory
     {
         [Key]
-        public int ApprovalId { get; set; }
+        public int? ApprovalId { get; set; }
         [Required]
         public int PharmacyId { get; set; }
         [Required]
