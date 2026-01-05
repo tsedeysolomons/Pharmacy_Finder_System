@@ -11,9 +11,9 @@ namespace PharmacyFinder.API.Models.Entities
         public int MedicineId { get; set; }
         [Required]
         [StringLength(100)]
-        public string MedicineName { get; set; }
+        public string? MedicineName { get; set; }
         [StringLength(500)]
-        public string Manufacturer { get; set; }
+        public string? Manufacturer { get; set; }
         [Required]
         public bool IsPrescriptionRequired { get; set; }
     }

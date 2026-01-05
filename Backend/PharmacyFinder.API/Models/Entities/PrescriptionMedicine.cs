@@ -12,11 +12,11 @@ namespace PharmacyFinder.API.Models.Entities
         [Required]
         public int PrescriptionId { get; set; }
         [StringLength(100)]
-        public string MedicineName { get; set; }
+        public string? MedicineName { get; set; }
         [Required]
         public int Quantity { get; set; }
         [ForeignKey("PrescriptionId")]
-        public Prescription Prescription { get; set; }
+        public Prescription? Prescription { get; set; }
 
     }
 }

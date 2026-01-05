@@ -14,12 +14,12 @@ namespace PharmacyFinder.API.Models.Entities
         public int OwnerId { get; set; }
         [Required]
         [MaxLength(200)]
-        public string PharmacyName { get; set; }
+        public string? PharmacyName { get; set; }
         [MaxLength(300)]
         public string? LicenseNumber { get; set; }
         [Required]
         [MaxLength(15)]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
         [Required]
         [MaxLength(100)]
         public string? Email { get; set; }
@@ -32,7 +32,8 @@ namespace PharmacyFinder.API.Models.Entities
         public decimal Longitude { get; set; }
         [Required]
         public bool IsActive { get; set; } = true;
-        [Required]
+        [Required]// Add this inside the Pharmacy class
+        public virtual ICollection<PharmacyApprovalHistory>? ApprovalHistory { get; set; }
         [MaxLength(100)]
         public string ApprovalStatus { get; set; } = "Pending";
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

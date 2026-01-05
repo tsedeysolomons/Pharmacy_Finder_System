@@ -14,11 +14,11 @@ namespace PharmacyFinder.API.Models.Entities
         public int UserId { get; set; }
         [Required]
         [StringLength(255)]
-        public string ImagePath { get; set; }
+        public string? ImagePath { get; set; }
         [StringLength(20)]
         public string Status { get; set; } = "Pending";
         public DateTime UploadedAt { get; set; } = DateTime.UtcNow;
         [ForeignKey("UserId")]
-        public User User { get; set; }
+        public User? User { get; set; }
     }
 }

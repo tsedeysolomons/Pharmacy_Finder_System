@@ -23,9 +23,9 @@ namespace PharmacyFinder.API.Models.Entities
         public int Quantity { get; set; }
         public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
         [ForeignKey("PharmacyId")]
-        public Pharmacy Pharmacy { get; set; }
+        public Pharmacy? Pharmacy { get; set; }
         [ForeignKey("MedicineId")]
-        public Medicine Medicine { get; set; }
+        public Medicine? Medicine { get; set; }
 
     }
 

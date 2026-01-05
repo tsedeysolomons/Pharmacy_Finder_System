@@ -13,19 +13,20 @@ namespace PharmacyFinder.API.Models.Entities
 
         [Required]
         [MaxLength(100)]
-        public string FullName { get; set; }
+        public string? FullName { get; set; }
 
         [Required]
         [MaxLength(100)]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Required]
         [MaxLength(100)]
-        public string PasswordHash { get; set; }
+        public string? PasswordHash { get; set; }// Add this inside the User class
+        public virtual ICollection<PharmacyApprovalHistory>? ApprovedPharmacies { get; set; }
 
         [Required]
         [MaxLength(15)]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
         public bool IsActive { get; set; } = true;
 

@@ -15,12 +15,12 @@ namespace PharmacyFinder.API.Models.Entities
         [Required]
         public int ApprovedByUserId { get; set; }
         [StringLength(255)]
-        public string Remarks { get; set; }
-        public DateTime ApprovedAt { get; set; } = DateTime.UtcNow;
+        public string? Remarks { get; set; }
+        public DateTime? ApprovedAt { get; set; } = DateTime.UtcNow;
         [ForeignKey("PharmacyId")]
-        public Pharmacy Pharmacy { get; set; }
+        public Pharmacy? Pharmacy { get; set; }
         [ForeignKey("ApprovedByUserId")]
-        public User Approver { get; set; }
+        public User? Approver { get; set; }
 
     }
 }

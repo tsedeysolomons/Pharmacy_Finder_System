@@ -13,7 +13,7 @@ namespace PharmacyFinder.API.Models.Entities
 
         [Required]
         [MaxLength(50)]
-        public string RoleName { get; set; }
+        public string? RoleName { get; set; }
 
         public ICollection<UserRole>? UserRoles { get; set; }
     }

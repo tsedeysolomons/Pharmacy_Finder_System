@@ -17,7 +17,7 @@ namespace PharmacyFinder.API.Models.Entities
         [Required]
         public TimeSpan CloseTime { get; set; }
         [ForeignKey("PharmacyId")]
-        public Pharmacy Pharmacy { get; set; }
+        public Pharmacy? Pharmacy { get; set; }
 
 
 
