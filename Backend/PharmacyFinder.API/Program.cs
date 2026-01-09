@@ -2,21 +2,57 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using PharmacyFinder.API.Data;
-//using NetTopologySuite.Geometries;
-
+using PharmacyFinder.API.Services.Interfaces;
+using PharmacyFinder.API.Services.Implementations;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-// Swagger services
+// Add services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
+// Add Swagger with JWT support
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Pharmacy Finder API",
+        Version = "v1",
+        Description = "API for Pharmacy Registration and Medicine Management System"
+    });
+
+    // Add JWT Authentication to Swagger
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter JWT token in format: Bearer {token}"
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
+
+// Database
 builder.Services.AddDbContext<ApplsDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-    sqlOptions => sqlOptions.UseNetTopologySuite()
-));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add JWT Authentication
 builder.Services.AddAuthentication(options =>
@@ -26,7 +62,6 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-#pragma warning disable CS8604 // Possible null reference argument.
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
@@ -38,30 +73,36 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     };
-#pragma warning restore CS8604 // Possible null reference argument.
 });
+
+// Register JWT Service
+builder.Services.AddScoped<IJwtService, JwtService>();
+
+// Add Authorization
+builder.Services.AddAuthorization();
 
 WebApplication app = builder.Build();
 
+// Database migration
 using (IServiceScope scope = app.Services.CreateScope())
 {
     try
     {
         ApplsDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplsDbContext>();
         dbContext.Database.Migrate();
-        if (!dbContext.Database.CanConnect())
+
+        if (dbContext.Database.CanConnect())
         {
-            // Database connection successful
-            throw new NotImplementedException("Unable to connect to the database.");
+            Console.WriteLine("✅ Database connection successful!");
         }
         else
         {
-            Console.WriteLine("Database connection successful!");
+            Console.WriteLine("❌ Unable to connect to the database.");
         }
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Database migration/connection failed: {ex.Message}");
+        Console.WriteLine($"⚠️ Database migration/connection failed: {ex.Message}");
     }
 }
 
@@ -71,13 +112,15 @@ if (app.Environment.IsDevelopment())
     _ = app.UseSwaggerUI();
 }
 
-app.UseAuthentication();
+// Order is important!
+app.UseHttpsRedirection();
+app.UseAuthentication(); // ← Must come before Authorization
 app.UseAuthorization();
 app.MapControllers();
 
+// Health check
 app.MapGet("/", () => "Pharmacy Finder API is running 🚀");
 
-// Health check endpoint
 app.MapGet("/api/health", () =>
 {
     return Results.Ok(new

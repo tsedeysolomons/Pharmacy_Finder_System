@@ -3,16 +3,17 @@ using Microsoft.EntityFrameworkCore;
 using PharmacyFinder.API.Data;
 using PharmacyFinder.API.Models.DTOs;
 using PharmacyFinder.API.Models.Entities;
-using PharmacyFinder.API.Services.Implementations;
+//using PharmacyFinder.API.Services.Implementations;
+using PharmacyFinder.API.Services.Interfaces;
 
 namespace PharmacyFinder.API.Controllers
 {
     [ApiController]
     [Route("api/auth")]
-    public class AuthController(ApplsDbContext context, JwtService jwtService) : ControllerBase
+    public class AuthController(ApplsDbContext context, IJwtService jwtService) : ControllerBase
     {
         private readonly ApplsDbContext _context = context;
-        private readonly JwtService _jwtService = jwtService;
+        private readonly IJwtService _jwtService = jwtService;
 
         // ================= REGISTER =================
         [HttpPost("register")]

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PharmacyFinder.API.Data;
 
@@ -11,9 +12,11 @@ using PharmacyFinder.API.Data;
 namespace PharmacyFinder.API.Migrations
 {
     [DbContext(typeof(ApplsDbContext))]
-    partial class ApplsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260109092828_FixedApprovalEntity")]
+    partial class FixedApprovalEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

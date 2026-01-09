@@ -43,7 +43,6 @@ namespace PharmacyFinder.API.Data
                 entity.HasKey(e => e.RoleId);
                 entity.Property(e => e.RoleName).IsRequired().HasMaxLength(50);
                 entity.HasIndex(e => e.RoleName).IsUnique();
-
                 entity.HasData(
                     new Role { RoleId = 1, RoleName = "Admin" },
                     new Role { RoleId = 2, RoleName = "PharmacyOwner" },
@@ -55,11 +54,9 @@ namespace PharmacyFinder.API.Data
             modelBuilder.Entity<UserRole>(entity =>
             {
                 entity.HasKey(e => new { e.UserId, e.RoleId });
-
                 entity.HasOne(ur => ur.User)
                       .WithMany(u => u.UserRoles)
                       .HasForeignKey(ur => ur.UserId);
-
                 entity.HasOne(ur => ur.Role)
                       .WithMany(r => r.UserRoles)
                       .HasForeignKey(ur => ur.RoleId);
@@ -79,10 +76,10 @@ namespace PharmacyFinder.API.Data
                 entity.Property(e => e.Longitude).HasColumnType("decimal(9,6)");
                 entity.Property(e => e.ApprovalStatus)
                       .IsRequired()
-                      .HasDefaultValue("Pending");
+                      .HasConversion<string>()
+                      .HasDefaultValue(ApprovalStatus.Pending);
                 entity.Property(e => e.CreatedAt)
                       .ValueGeneratedOnAdd();
-
                 entity.HasOne(p => p.Owner)
                       .WithMany(u => u.Pharmacies)
                       .HasForeignKey(p => p.OwnerId)
@@ -117,19 +114,28 @@ namespace PharmacyFinder.API.Data
 
             // ========= PharmacyApprovalHistory =========
             modelBuilder.Entity<PharmacyApprovalHistory>(entity =>
-            {
-                entity.HasKey(e => e.ApprovalId);
-                entity.Property(e => e.Remarks).HasMaxLength(255);
-
-                entity.HasOne(pa => pa.Pharmacy)
-                      .WithMany(p => p.ApprovalHistory)
-                      .HasForeignKey(pa => pa.PharmacyId);
-
-                entity.HasOne(pa => pa.Approver)
-                      .WithMany(u => u.ApprovedPharmacies)
-                      .HasForeignKey(pa => pa.ApprovedByUserId)
-                      .OnDelete(DeleteBehavior.Restrict);
-            });
+          {
+              entity.HasKey(e => e.ApprovalId);
+              entity.Property(e => e.ApprovalStatus) // ADD THIS
+                  .IsRequired()
+                  .HasMaxLength(50)
+                  .HasDefaultValue("Pending");
+              entity.Property(e => e.Remarks)
+                  .HasMaxLength(255);
+              entity.Property(e => e.ApprovedAt)
+                  .IsRequired(false);
+              entity.Property(e => e.CreatedAt) // ADD THIS
+                  .IsRequired()
+                  .HasDefaultValueSql("GETUTCDATE()");
+              entity.HasOne(pa => pa.Pharmacy)
+                  .WithMany(p => p.ApprovalHistory)
+                  .HasForeignKey(pa => pa.PharmacyId)
+                  .OnDelete(DeleteBehavior.Cascade); // FIX: DeleteBehavior not Behavior
+              entity.HasOne(pa => pa.Approver)
+                  .WithMany(u => u.ApprovedPharmacies)
+                  .HasForeignKey(pa => pa.ApprovedByUserId)
+                  .OnDelete(DeleteBehavior.Restrict); // FIX: DeleteBehavior not Behavior
+          });
 
             // ========= Medicine =========
             modelBuilder.Entity<Medicine>(entity =>
@@ -138,7 +144,6 @@ namespace PharmacyFinder.API.Data
                 entity.Property(e => e.MedicineName).IsRequired().HasMaxLength(150);
                 entity.Property(e => e.Manufacturer).HasMaxLength(150);
                 entity.Property(e => e.IsPrescriptionRequired).HasDefaultValue(false);
-
                 entity.HasData(
                     new Medicine { MedicineId = 1, MedicineName = "Paracetamol", Manufacturer = "Generic", IsPrescriptionRequired = false },
                     new Medicine { MedicineId = 2, MedicineName = "Amoxicillin", Manufacturer = "HealthCorp", IsPrescriptionRequired = true },
