@@ -24,8 +24,9 @@ namespace PharmacyFinder.API.Services.Implementations
                 new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString(CultureInfo.InvariantCulture)),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Name, user.FullName),
-                new Claim(ClaimTypes.Role, "User") // Update with actual roles later
             ];
+
+            claims.AddRange(user.UserRoles.Select(ur => new Claim(ClaimTypes.Role, ur.Role.RoleName)));
 
             SecurityTokenDescriptor tokenDescriptor = new()
             {

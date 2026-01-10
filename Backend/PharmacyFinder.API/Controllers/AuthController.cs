@@ -55,6 +55,8 @@ namespace PharmacyFinder.API.Controllers
             }
 
             User? user = await _context.Users
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
                 .FirstOrDefaultAsync(u => u.Email == dto.Email);
 
             if (user == null)
